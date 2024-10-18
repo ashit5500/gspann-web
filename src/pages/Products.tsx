@@ -7,26 +7,42 @@ import {
     TableCell,
     TableContainer,
     TableHead,
-    TableRow
+    TableRow,
   } from "@mui/material";
   import React, { useEffect, useState } from "react";
   
-  const ProjectListing = () => {
-    const [rows, setRows] = useState([]);
-    const [currentPage, setCurrentPage] = useState(1);
-    const [totalDocs, setTotalDocs] = useState(0);
+  // Define the shape of the product data
+  interface Product {
+    id: number;
+    thumbnail: string;
+    title: string;
+    sku: string;
+    description: string;
+    brand: string;
+    category: string;
+    price: number;
+    rating: number;
+    stock: number;
+  }
+  
+  const Products: React.FC = () => {
+    const [rows, setRows] = useState<Product[]>([]); // Define state type as an array of Product
+    const [currentPage, setCurrentPage] = useState<number>(1);
+    const [totalDocs, setTotalDocs] = useState<number>(0);
     const rowsPerPage = 5;
   
     useEffect(() => {
-      getData()
+      getData();
     }, [currentPage]);
   
-    const getData = async () => {
-      await fetch(`https://dummyjson.com/products?limit=${rowsPerPage}&skip=${currentPage}`)
+    const getData = () => {
+      fetch(
+        `https://dummyjson.com/products?limit=${rowsPerPage}&skip=${(currentPage - 1) * rowsPerPage}`
+      )
         .then((res) => res.json())
         .then((data) => {
-          setRows(data.products)
-          setTotalDocs(data.total)
+          setRows(data.products);
+          setTotalDocs(data.total);
         });
     };
   
@@ -34,9 +50,9 @@ import {
       <div>
         <div
           style={{
-            padding: '1rem 0rem',
-            background: '#fff',
-            margin: '-0.5rem 1rem',
+            padding: "1rem 0rem",
+            background: "#fff",
+            margin: "-0.5rem 1rem",
           }}
         >
           {/* Table Component */}
@@ -44,16 +60,16 @@ import {
             <Table>
               <TableHead>
                 <TableRow>
-                  <TableCell sx={{ fontWeight: 'bold' }}>ID</TableCell>
-                  <TableCell sx={{ fontWeight: 'bold' }}>Image</TableCell>
-                  <TableCell sx={{ fontWeight: 'bold' }}>Title</TableCell>
-                  <TableCell sx={{ fontWeight: 'bold' }}>SKU</TableCell>
-                  <TableCell sx={{ fontWeight: 'bold' }}>Description</TableCell>
-                  <TableCell sx={{ fontWeight: 'bold' }}>Brand</TableCell>
-                  <TableCell sx={{ fontWeight: 'bold' }}>Category</TableCell>
-                  <TableCell sx={{ fontWeight: 'bold' }}>Price</TableCell>
-                  <TableCell sx={{ fontWeight: 'bold' }}>Rating</TableCell>
-                  <TableCell sx={{ fontWeight: 'bold' }}>Stock</TableCell>
+                  <TableCell sx={{ fontWeight: "bold" }}>ID</TableCell>
+                  <TableCell sx={{ fontWeight: "bold" }}>Image</TableCell>
+                  <TableCell sx={{ fontWeight: "bold" }}>Title</TableCell>
+                  <TableCell sx={{ fontWeight: "bold" }}>SKU</TableCell>
+                  <TableCell sx={{ fontWeight: "bold" }}>Description</TableCell>
+                  <TableCell sx={{ fontWeight: "bold" }}>Brand</TableCell>
+                  <TableCell sx={{ fontWeight: "bold" }}>Category</TableCell>
+                  <TableCell sx={{ fontWeight: "bold" }}>Price</TableCell>
+                  <TableCell sx={{ fontWeight: "bold" }}>Rating</TableCell>
+                  <TableCell sx={{ fontWeight: "bold" }}>Stock</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -95,5 +111,5 @@ import {
     );
   };
   
-  export default ProjectListing;
+  export default Products;
   
